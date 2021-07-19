@@ -1,7 +1,6 @@
 node_modules/
 dist/
 database.db
-ormconfig.js
 
 yarn.lock
 .env
