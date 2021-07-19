@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 export class SeedVehicles1626727816471 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      "INSERT INTO VEHICLES " +
+      "INSERT INTO vehicles " +
         "(id, description, created_at, updated_at) " +
         "VALUES " +
         "('12df96fa-9e0e-45b4-affd-c0a108de8f4e', 'Carro', '2021-07-18 22:47:15.478', '2021-07-18 22:47:15.478')," +
