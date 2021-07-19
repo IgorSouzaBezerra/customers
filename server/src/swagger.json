@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3333/",
+      "url": "https://customercrud.herokuapp.com/",
       "description": "Production Server"
     },
     {
