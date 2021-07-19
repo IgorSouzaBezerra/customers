@@ -28,6 +28,24 @@
             "application/json": {
               "schema": {
                 "$ref": "#definitions/Customer"
+              },
+              "example": {
+                "name": "Igor",
+                "surname": "Bezerra",
+                "email": "igor.souza1.bezerra@gmail.com",
+                "cpf": "12345678928",
+                "phone": "16 997654486",
+                "type": "typePerson_id",
+                "end_time": "19:02",
+                "day_service": "20/01/2020",
+                "vehicles": ["vehicle_id"],
+                "address": {
+                  "zip_code": "13568812",
+                  "street": "Vereador Juvenal Silva",
+                  "number": "112",
+                  "city": "São Carlos",
+                  "state": "São Paulo"
+                }
               }
             }
           }
@@ -52,7 +70,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#definitions/Customer"
+                    "$ref": "#definitions/CustomerGet"
                   }
                 }
               }
@@ -67,47 +85,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "surname": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "cpf": {
-                    "type": "string"
-                  },
-                  "phone": {
-                    "type": "string"
-                  },
-                  "address": {
-                    "type": "object",
-                    "properties": {
-                      "zip_code": {
-                        "type": "string"
-                      },
-                      "street": {
-                        "type": "string"
-                      },
-                      "number": {
-                        "type": "string"
-                      },
-                      "city": {
-                        "type": "string"
-                      },
-                      "state": {
-                        "type": "string"
-                      }
-                    }
+                "type": "array",
+                  "items": {
+                    "$ref": "#definitions/CustomerGet"
                   }
-                }
               }
             }
           }
@@ -138,8 +119,18 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Success"
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#definitions/CustomerGet"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -166,6 +157,100 @@
     }
   },
   "definitions": {
+    "CustomerGet": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "cpf": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "end_time": {
+          "type": "string"
+        },
+        "day_service": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "type": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string"
+            },
+            "updated_at": {
+              "type": "string"
+            }
+          }
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "zip_code": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "number": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
+        },
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "updated_at": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "Customer": {
       "type": "object",
       "properties": {
@@ -183,6 +268,21 @@
         },
         "phone": {
           "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "end_time": {
+          "type": "string"
+        },
+        "day_service": {
+          "type": "string"
+        },
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "address": {
           "type": "object",
