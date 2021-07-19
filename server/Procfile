@@ -1,1 +1,1 @@
-web: npm run build && npm run prod
+web: node dist/shared/infra/http/server.js
