@@ -44,8 +44,6 @@ class CreateCustomerUseCase {
 
     const vehiclesEntity = await this.vehiclesRepository.FindByIds(vehicles);
 
-    console.log(vehiclesEntity);
-
     const customer = new Customer();
     const addressEntity = new Address();
 
@@ -63,8 +61,6 @@ class CreateCustomerUseCase {
       address: addressEntity,
       vehicles: vehiclesEntity,
     });
-
-    console.log(customer);
 
     const createdCustomer = await this.customersRepository.Create(customer);
 

@@ -18,19 +18,6 @@ class CreateCustomerController {
       vehicles,
     } = request.body;
 
-    console.log({
-      name,
-      surname,
-      email,
-      cpf,
-      phone,
-      type,
-      end_time,
-      day_service,
-      address,
-      vehicles,
-    });
-
     const createCustomer = container.resolve(CreateCustomerUseCase);
 
     const customer = await createCustomer.execute({

@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Header } from "../../components/Header";
 import { Options } from "../../components/Options";
@@ -23,14 +24,6 @@ interface IVehicles {
   description: string;
 }
 
-interface IAddress {
-  zip_code: string;
-  street: string;
-  number: string;
-  city: string;
-  state: string;
-}
-
 interface ICustomer {
   name: string;
   surname: string;
@@ -39,30 +32,64 @@ interface ICustomer {
   phone: string;
   type: string;
   end_time:string;
-  vehicles: string[];
   day_service: string;
-  address: IAddress;
+  zip_code: string;
+  street: string;
+  state: string;
+  number: string;
+  city: string;
+  vehicles: string[];
 }
 
 function CreateCustomer() {
+  const { register, handleSubmit } = useForm();
+
+  const createCustomer: SubmitHandler<ICustomer> = async (values) => {
+    let vehiclesArray = [];
+
+    if (car) {
+      const carFilter = vehicles.filter(c => c.description === "Carro");
+      vehiclesArray.push(carFilter[0].id);
+    }
+    
+    if (truck) {
+      const trukFilter = vehicles.filter(c => c.description === "Caminhão");
+      vehiclesArray.push(trukFilter[0].id);
+    }
+    
+    if (motorcycle) {
+      const motorcycleFilter = vehicles.filter(c => c.description === "Moto");
+      vehiclesArray.push(motorcycleFilter[0].id);
+    }
+
+    values.vehicles = vehiclesArray;
+
+
+      await api.post("customers", { 
+        name: values.name,
+        surname: values.surname,
+        email: values.email,
+        cpf: values.cpf,
+        phone: values.phone,
+        type: values.type,
+        end_time: values.end_time,
+        day_service: values.day_service,
+        vehicles: values.vehicles,
+        address: {
+          zip_code: values.zip_code,
+          street: values.street,
+          number: values.number,
+          city: values.city,
+          state: values.state,
+        },
+      })
+    history.push("/");
+    SucessToast("Cliente criado com sucesso!");
+  }
+
   const history = useHistory();
   const [options, setOptions] = useState<ITypePersons[]>([]);
   const [vehicles, setVehicles] = useState<IVehicles[]>([]);
-
-  const [type, setTypePerson] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
-  const [cpf, setCPF] = useState("");
-  const [phone, setPhone] = useState("");
-  const [end_time, setEndTime] = useState("");
-  const [day_service, setDayService] = useState("");
-
-  const [zip_code, setZipCode] = useState("");
-  const [street, setStreet] = useState("");
-  const [number, setNumber] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
 
   const [car, setCar] = useState(false);
   const [truck, setTruck] = useState(false);
@@ -83,62 +110,13 @@ function CreateCustomer() {
     loadVehicles();
   }, [loadOptions, loadVehicles]);
 
-  const submitForm = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const customer: ICustomer  = {
-      type,
-      name,
-      surname,
-      email,
-      cpf,
-      phone,
-      end_time,
-      day_service,
-      address: {
-        zip_code,
-        street,
-        number,
-        city,
-        state
-      },
-      vehicles: [],
-    }
-
-    if (car) {
-      const carFilter = vehicles.filter(c => c.description === "Carro");
-      customer.vehicles.push(carFilter[0].id);
-    }
-
-    if (truck) {
-      const trukFilter = vehicles.filter(c => c.description === "Caminhão");
-      customer.vehicles.push(trukFilter[0].id);
-    }
-
-    if (motorcycle) {
-      const motorcycleFilter = vehicles.filter(c => c.description === "Moto");
-      customer.vehicles.push(motorcycleFilter[0].id);
-    }
-
-    console.log(customer);
-
-    await api.post('customers', {
-      customer
-    });
-
-    SucessToast("Cliente criado com sucesso!");
-    history.push("/");
-  }, [type, email, name, surname, cpf, phone, end_time, 
-    day_service, zip_code, street, number, city, state, 
-    car, truck, motorcycle, vehicles, history]);
-
   return (
     <>
       <Header />
       <Options title="Criar Cliente" />
-      <Container onSubmit={submitForm}>
+      <Container onSubmit={handleSubmit(createCustomer)}>
         <Label>Tipo de Pessoa</Label>
-        <Select onChange={e => setTypePerson(e.target.value)} >
+        <Select {...register('type')}  >
           <option>Selecione uma opção</option>
           {options.map(o => (
           <option value={o.id} key={o.id}>{o.description}</option>
@@ -146,51 +124,51 @@ function CreateCustomer() {
         </Select>
 
         <Label>Nome</Label>
-        <Input type="text" name="name" onChange={e => setName(e.target.value)} />
+        <Input type="text" {...register('name')}  />
 
         <Label>Sobrenome</Label>
-        <Input type="text" name="surname" onChange={e => setSurname(e.target.value)} />
+        <Input type="text" {...register('surname')}  />
 
         <Label>Email</Label>
-        <Input type="text" name="email" onChange={e => setEmail(e.target.value)} />
+        <Input type="text" {...register('email')}  />
         
         <Label>CPF</Label>
-        <Input type="text" name="cpf" onChange={e => setCPF(e.target.value)} />
+        <Input type="text" {...register('cpf')}  />
         
         <Label>Phone</Label>
-        <Input type="text" name="phone" onChange={e => setPhone(e.target.value)} />
+        <Input type="text" {...register('phone')}  />
         
         <Label>Horário</Label>
-        <Input type="time" name="end_time" onChange={e => setEndTime(e.target.value)} />
+        <Input type="time" {...register('end_time')}  />
         
         <Label>Data do Atendimento</Label>
-        <Input type="date" name="day_service" onChange={e => setDayService(e.target.value)} />
+        <Input type="date" {...register('day_service')}  />
         
         <FormArea>
           <Label>CEP</Label>
-          <Input type="text" name="zip_code" onChange={e => setZipCode(e.target.value)} />
+          <Input type="text" {...register('zip_code')}  />
 
           <Label>Rua</Label>
-          <Input type="text" name="street" onChange={e => setStreet(e.target.value)} />
+          <Input type="text" {...register('street')}  />
 
           <Label>Número</Label>
-          <Input type="text" name="number" onChange={e => setNumber(e.target.value)} />
+          <Input type="text" {...register('number')}  />
 
           <Label>Cidade</Label>
-          <Input type="text" name="city" onChange={e => setCity(e.target.value)} />
+          <Input type="text" {...register('city')}  />
 
           <Label>Estado</Label>
-          <Input type="text" name="state" onChange={e => setState(e.target.value)} />
+          <Input type="text" {...register('state')}  />
         </FormArea>  
         
         <FormArea>
-          <input type="checkbox" checked={car} onChange={e => setCar(e.target.checked)} />
+          <input type="checkbox" checked={car} {...register('car')} onChange={e => setCar(e.target.checked)}  />
           <Label>Carro</Label>
 
-          <input type="checkbox" checked={truck} onChange={e => setTruck(e.target.checked)} />
+          <input type="checkbox" checked={truck} {...register('truck')} onChange={e => setTruck(e.target.checked)}  />
           <Label>Caminhão</Label>
 
-          <input type="checkbox" checked={motorcycle} onChange={e => setMotorCycle(e.target.checked)} />
+          <input type="checkbox" checked={motorcycle} {...register('motorcycle')} onChange={e => setMotorCycle(e.target.checked)}  />
           <Label>Motocicleta</Label>
         </FormArea>
 
