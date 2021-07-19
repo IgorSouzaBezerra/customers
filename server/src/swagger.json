@@ -1,0 +1,210 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Customer CRUD Documentation",
+    "description": "This is a Customer CRUD API",
+    "version": "1.0.0",
+    "contact": {
+      "email": "igor.souza1.bezerra@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333/",
+      "description": "Production Server"
+    },
+    {
+      "url": "http://localhost:3333/",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/customers": {
+      "post": {
+        "tags": ["Customers"],
+        "description": "Create a new Customer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/Customer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Customer already exists!"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Customers"],
+        "description": "List all customers",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#definitions/Customer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Customers"],
+        "description": "Create a new Customer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "surname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "cpf": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "object",
+                    "properties": {
+                      "zip_code": {
+                        "type": "string"
+                      },
+                      "street": {
+                        "type": "string"
+                      },
+                      "number": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Customer already exists!"
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "tags": ["Customers"],
+        "description": "Find One Customer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Customers"],
+        "description": "Delete Customer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "cpf": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "zip_code": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "number": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+ }

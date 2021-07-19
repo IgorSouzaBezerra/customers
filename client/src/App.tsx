@@ -1,0 +1,21 @@
+import { BrowserRouter as Router } from "react-router-dom";
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { Routes } from "./routes";
+import { GlobalStyle } from "./styles/global";
+
+function App() {
+  return (
+    <>
+      <Router>
+        <Routes />
+      </Router>
+      <GlobalStyle />
+      <ToastContainer />
+    </>
+  );
+}
+
+export default App;
