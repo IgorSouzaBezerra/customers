@@ -162,14 +162,20 @@ function CreateCustomer() {
         </FormArea>  
         
         <FormArea>
-          <input type="checkbox" checked={car} {...register('car')} onChange={e => setCar(e.target.checked)}  />
-          <Label>Carro</Label>
-
-          <input type="checkbox" checked={truck} {...register('truck')} onChange={e => setTruck(e.target.checked)}  />
-          <Label>Caminhão</Label>
-
-          <input type="checkbox" checked={motorcycle} {...register('motorcycle')} onChange={e => setMotorCycle(e.target.checked)}  />
-          <Label>Motocicleta</Label>
+          <div>
+            <input type="checkbox" checked={car} {...register('car')} onChange={e => setCar(e.target.checked)}  />
+            <Label>Carro</Label>
+          </div>
+          
+          <div>
+            <input type="checkbox" checked={truck} {...register('truck')} onChange={e => setTruck(e.target.checked)}  />
+            <Label>Caminhão</Label>
+          </div>
+          
+          <div>
+            <input type="checkbox" checked={motorcycle} {...register('motorcycle')} onChange={e => setMotorCycle(e.target.checked)}  />
+            <Label>Motocicleta</Label>
+          </div>
         </FormArea>
 
         <Button type="submit">Salvar</Button>

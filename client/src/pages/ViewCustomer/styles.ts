@@ -4,6 +4,10 @@ export const Container = styled.div`
   margin: 0 auto;
   width: 30%;
 
+  background-color: #FFF;
+  padding: 20px;
+  border-radius: 4px;
+
   input {
     margin-bottom: 12px;
   }

@@ -4,11 +4,15 @@ export const Container = styled.form`
   margin: 0 auto;
   width: 30%;
   margin-bottom: 100px;
+
+  background-color: #FFF;
+  padding: 20px;
+  border-radius: 4px;
 `;
 
 export const Label = styled.label`
   color: var(--text-body);
-  
+  margin-left: 5px;
 `;
 
 export const Select = styled.select`
@@ -44,11 +48,16 @@ export const Input = styled.input`
 `;
 
 export const FormArea = styled.div`
+  display: flex;
+  flex-direction: column;
+
   margin-top: 20px;
   margin-bottom: 20px;
   padding: 20px;
   border: 1px solid #dedfe3;
   border-radius: 4px;
+
+  
 `;
 
 export const Button = styled.button`
