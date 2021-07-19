@@ -1,6 +1,5 @@
 node_modules/
 dist/
-database.db
 
 yarn.lock
 .env
