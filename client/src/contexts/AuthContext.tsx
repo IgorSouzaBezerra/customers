@@ -31,7 +31,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const token = localStorage.getItem("@LOG:token");
-
+    
     if (token) {
       api.get("/users/me", {
         headers: {
@@ -58,6 +58,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         password
       });
+
+      console.log(response)
 
       setUser(response.data.user);
       api.defaults.headers["Authorization"] = `Bearer ${response.data.token}`;
