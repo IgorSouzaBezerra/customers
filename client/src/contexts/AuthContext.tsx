@@ -30,7 +30,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("@KIT:token");
+    const token = localStorage.getItem("@LOG:token");
 
     if (token) {
       api.get("/users/me", {
@@ -62,9 +62,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(response.data.user);
       api.defaults.headers["Authorization"] = `Bearer ${response.data.token}`;
 
-      localStorage.setItem("@KIT:user", JSON.stringify(response.data.user));
-      localStorage.setItem("@KIT:token", response.data.token);
-      localStorage.setItem("@KIT:refreshToken", response.data.refreshToken);
+      localStorage.setItem("@LOG:user", JSON.stringify(response.data.user));
+      localStorage.setItem("@LOG:token", response.data.token);
+      localStorage.setItem("@LOG:refreshToken", response.data.refreshToken);
     } catch {
       ErrorToast("Credenciais incorretas!")
     }
@@ -73,9 +73,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   function Logout() {
     setUser(null);
 
-    localStorage.removeItem('@KIT:user');
-    localStorage.removeItem('@KIT:token');
-    localStorage.removeItem('@KIT:refreshToken');
+    localStorage.removeItem('@LOG:user');
+    localStorage.removeItem('@LOG:token');
+    localStorage.removeItem('@LOG:refreshToken');
   }
 
   return (

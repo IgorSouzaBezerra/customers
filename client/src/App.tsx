@@ -1,3 +1,4 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import { ToastContainer } from 'react-toastify';
@@ -7,10 +8,11 @@ import { AuthProvider } from "./contexts/AuthContext";
 
 import { Routes } from "./routes";
 import { GlobalStyle } from "./styles/global";
+import { theme } from "./styles/theme";
 
 function App() {
   return (
-    <>
+    <ChakraProvider theme={theme}>
       <AuthProvider>
         <Router>
           <Routes />
@@ -18,7 +20,7 @@ function App() {
       </AuthProvider>
       <GlobalStyle />
       <ToastContainer />
-    </>
+    </ ChakraProvider>
   );
 }
 
