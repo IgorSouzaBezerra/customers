@@ -5,6 +5,7 @@ import { ListCustomerController } from "../../../../modules/customers/useCase/li
 import { ListCustomersCotroller } from "../../../../modules/customers/useCase/listCustomers/ListCustomersController";
 import { RemoveCustomerController } from "../../../../modules/customers/useCase/removeCustomer/RemoveCustomerController";
 import { UpdateCustomerController } from "../../../../modules/customers/useCase/updateCustomer/UpdateCustomerController";
+import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 
 const customerRoutes = Router();
 
@@ -14,10 +15,14 @@ const listCustomerController = new ListCustomerController();
 const removeCustomerController = new RemoveCustomerController();
 const updateCustomerController = new UpdateCustomerController();
 
-customerRoutes.post("/", createCustomerController.handle);
-customerRoutes.get("/", listCustomersController.handle);
-customerRoutes.get("/:id", listCustomerController.handle);
-customerRoutes.delete("/:id", removeCustomerController.handle);
-customerRoutes.put("/", updateCustomerController.handle);
+customerRoutes.post("/", ensureAuthenticated, createCustomerController.handle);
+customerRoutes.get("/", ensureAuthenticated, listCustomersController.handle);
+customerRoutes.get("/:id", ensureAuthenticated, listCustomerController.handle);
+customerRoutes.delete(
+  "/:id",
+  ensureAuthenticated,
+  removeCustomerController.handle
+);
+customerRoutes.put("/", ensureAuthenticated, updateCustomerController.handle);
 
 export { customerRoutes };
