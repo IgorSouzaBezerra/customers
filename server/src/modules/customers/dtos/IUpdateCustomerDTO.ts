@@ -1,4 +1,5 @@
 import { Address } from "../infra/typeorm/entities/Address";
+import { Vehicle } from "../infra/typeorm/entities/Vehicle";
 
 export interface IUpdateCustomerDTO {
   id: string;
@@ -22,4 +23,6 @@ export interface IUpdateCustomerDTO {
   day_service: Date;
 
   address?: Address;
+
+  vehicles?: Vehicle;
 }

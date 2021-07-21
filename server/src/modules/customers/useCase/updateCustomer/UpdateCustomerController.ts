@@ -17,6 +17,7 @@ class UpdateCustomerController {
       day_service,
       type,
       address,
+      vehicles,
     } = request.body;
 
     const updateCustomer = container.resolve(UpdateCustomerUseCase);
@@ -33,6 +34,7 @@ class UpdateCustomerController {
       end_time,
       day_service,
       address,
+      vehicles,
     });
 
     return response.json(updatedCustomer);

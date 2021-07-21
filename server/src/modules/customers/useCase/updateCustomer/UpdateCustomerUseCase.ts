@@ -24,6 +24,7 @@ class UpdateCustomerUseCase {
     end_time,
     day_service,
     address,
+    vehicles,
   }: IUpdateCustomerDTO): Promise<Customer> {
     const customerExist = await this.customersRepository.Get(id);
 
@@ -57,6 +58,7 @@ class UpdateCustomerUseCase {
       end_time,
       day_service,
       address,
+      vehicles,
     });
 
     const updatedCustomer = await this.customersRepository.Update(
