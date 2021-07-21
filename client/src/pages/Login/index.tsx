@@ -23,7 +23,7 @@ export function LoginPage() {
   });
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 500));
     await Login(values);
   }
 

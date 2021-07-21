@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Box } from "@chakra-ui/react";
+
+import { Header } from "../../components/Header";
+import { Options } from "../../components/Options";
+import { Input } from "../../components/New/Input";
+
+import { Select } from "../../components/Form/Select";
+import { Radio } from "../../components/Form/Radio";
+import { CheckBox } from "../../components/Form/CheckBox";
 
 import { api } from "../../services/api";
 import { InfoToast } from "../../components/Toast";
-import { CheckBox } from "../../components/Form/CheckBox";
 
-import { Input } from "../../components/Form/Input";
-import { Radio } from "../../components/Form/Radio";
-import { Select } from "../../components/Form/Select";
-import { Container, FormArea } from "./styles";
-
-import { Header } from "../../components/Header";
-
-import { Options } from "../../components/Options";
 
 interface IParams {
   id: string;
@@ -86,42 +86,114 @@ function ViewCustomer() {
     <>
       <Header />
       <Options title="Visualização do Cliente" />
-      <Container>
-        <Select label="Tipo de Pessoa" defaultValue={customer?.type.id} disabled={true} />
+      <Box
+        margin="0 auto"
+        width="30%"
+        bg="#FFF"
+        p={30}
+        borderRadius={4}
+      >
+        <Select label="Tipo de Cliente" defaultValue={customer?.type.id} disabled={true} />
         <Radio active={customer?.active} name="ativo" label="Ativo"  />
         <Radio active={!(customer?.active)} name="ivativo" label="Inativo"  />
         <Input 
-          defaultValue={customer?.name} 
-          label={customer?.type.description === "Pessoa Jurídica" ? "Nome Fantasia" : "Nome do Cliente"} 
-          disabled={true} 
+          type="text" 
+          name="name"
+          defaultValue={customer?.name}
+          isDisabled
+          label={customer?.type.description === "Pessoa Jurídica" ? "Nome Fantasia" : "Nome do Cliente"}
+        /> 
+        <Input 
+          type="text" 
+          name="surname"
+          defaultValue={customer?.surname}
+          isDisabled
+          label={customer?.type.description === "Pessoa Jurídica" ? "Razão Social" : "Sobrenome do Cliente"}
         />
         <Input 
-          defaultValue={customer?.surname} 
-          label={customer?.type.description === "Pessoa Jurídica" ? "Razão Social" : "Sobrenome do Cliente"} 
-          disabled={true}
+          type="text" 
+          name="cpf"
+          defaultValue={customer?.cpf}
+          isDisabled
+          label={customer?.type.description === "Pessoa Jurídica" ? "CNPJ" : "CPF"} 
         />
         <Input 
-          defaultValue={customer?.cpf} 
-          label={customer?.type.description === "Pessoa Jurídica" ? "CNPJ" : "CPF"}  
-          disabled={true} 
+          type="text" 
+          name="email"
+          defaultValue={customer?.email}
+          isDisabled
+          label="E-mail"
         />
-        <Input defaultValue={customer?.email} label="CPF" disabled={true} />
-        <Input defaultValue={customer?.phone} label="Telefone" disabled={true} />
-        <Input defaultValue={customer?.end_time} label="Hora Final de Atendimento" disabled={true} />
-        <Input defaultValue={customer?.day_service} label="Data do Atendimento" disabled={true} />
-        <FormArea>
-          <Input defaultValue={customer?.address.zip_code} label="CEP" disabled={true} />
-          <Input defaultValue={customer?.address.street} label="Rua" disabled={true} />
-          <Input defaultValue={customer?.address.number} label="Nº" disabled={true} />
-          <Input defaultValue={customer?.address.city} label="Cidade" disabled={true} />
-          <Input defaultValue={customer?.address.state} label="Estado" disabled={true} />
-        </FormArea>
-        <FormArea>
+        <Input 
+          type="text" 
+          name="phone"
+          defaultValue={customer?.phone}
+          isDisabled
+          label="Telefone"
+        />
+        <Input 
+          type="text" 
+          name="end_time"
+          defaultValue={customer?.end_time}
+          isDisabled
+          label="Hora Final de Atendimento"
+        />
+        <Input 
+          type="text" 
+          name="day_service"
+          defaultValue={customer?.day_service}
+          isDisabled
+          label="Data do Atendimento"
+        />
+        <Box
+          mt={10}
+          mb={10}
+          p={7}
+          border="1px solid #dedfe3"
+          borderRadius={4}
+        >
+          <Input 
+            type="text" 
+            name="zip_code"
+            defaultValue={customer?.address.zip_code}
+            isDisabled
+            label="CEP"
+          />
+          <Input 
+            type="text" 
+            name="Rua"
+            defaultValue={customer?.address.street}
+            isDisabled
+            label="Rua"
+          />
+          <Input 
+            type="text" 
+            name="number"
+            defaultValue={customer?.address.number}
+            isDisabled
+            label="Número"
+          />
+          <Input 
+            type="text" 
+            name="city"
+            defaultValue={customer?.address.city}
+            isDisabled
+            label="Cidade"
+          />
+          <Input 
+            type="text" 
+            name="state"
+            defaultValue={customer?.address.state}
+            isDisabled
+            label="Estado"
+          />
+        </Box>
+        <Box>
           <CheckBox name="car" checked={car} label="Carro" disabled={true}  />
           <CheckBox name="truck" checked={truck} label="Caminhão" disabled={true}  />
           <CheckBox name="motorcycle" checked={motorcycle} label="Moto" disabled={true}  />
-        </FormArea>
-      </Container>
+        </Box>
+      </Box>
     </>
   );
 }

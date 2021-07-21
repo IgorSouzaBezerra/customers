@@ -1,7 +1,6 @@
 import { useHistory } from "react-router-dom";
+import { Flex, Text } from "@chakra-ui/react";
 import { IoIosArrowRoundBack } from "react-icons/io";
-
-import { Container } from "./styles";
 
 interface IProps {
   title: string;
@@ -11,15 +10,26 @@ interface IProps {
 function Options({ title, returnPageIcon = true }: IProps) {
   const history = useHistory();
   return (
-    <Container>
+    <Flex
+      maxW={1150}
+      margin="0 auto"
+      align="center"
+      justify="space-between"
+      mt={10}
+      mb={30}
+    >
       {returnPageIcon ? (
-        <IoIosArrowRoundBack onClick={history.goBack} size={40} color="#007FFF" />
+        <Flex
+          cursor="pointer"
+        >
+          <IoIosArrowRoundBack onClick={history.goBack} size={40} color="#007FFF" />
+        </Flex>
       ) : (
       <div />
       )}
-      <h1>{title}</h1>
+      <Text fontSize="2xl">{title}</Text>
       <div />
-    </ Container>
+    </ Flex>
   );
 }
 

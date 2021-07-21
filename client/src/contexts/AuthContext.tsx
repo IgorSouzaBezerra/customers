@@ -59,8 +59,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password
       });
 
-      console.log(response)
-
       setUser(response.data.user);
       api.defaults.headers["Authorization"] = `Bearer ${response.data.token}`;
 
