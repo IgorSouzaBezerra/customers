@@ -1,13 +1,19 @@
 import { forwardRef, ForwardRefRenderFunction } from "react";
 import { FieldError } from "react-hook-form"
 import { FormControl, FormLabel, Select as ChakraSelect, SelectProps as ChakraSelectProps, FormErrorMessage } from "@chakra-ui/react";
-import { ITypePerson } from "../../../interfaces/customers/ITypePerson";
+
+interface Options {
+  id: string | number;
+  description: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
 interface InputProps extends ChakraSelectProps {
   name: string;
   label?: string;
   placeholder?: string;
-  options?: ITypePerson[];
+  options?: Options[];
   error?: FieldError;
 }
 

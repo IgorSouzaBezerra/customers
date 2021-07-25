@@ -6,7 +6,7 @@ export function EditCustomer() {
   return (
     <>
       <Header />
-      <HeaderPage title="Visualização do cliente" />
+      <HeaderPage title="Edição do cliente" />
       <Form disabled={false} />
     </>
   );
