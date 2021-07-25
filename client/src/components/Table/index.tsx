@@ -4,22 +4,12 @@ import { IoTrashOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 import { api } from "../../services/api";
+import { ICustomer } from "../../interfaces/customers/ICustomer";
 
 import { Container } from "./styles";
 
-interface IType {
-  description: string;
-}
-
-interface ICustomers {
-  id: string;
-  name: string;
-  surname: string;
-  type: IType;
-}
-
-function Table() {
-  const[customers, setCustomers] = useState<ICustomers[]>([]);
+export function Table() {
+  const[customers, setCustomers] = useState<ICustomer[]>([]);
 
   const loadCustomers = useCallback(async () => {
     const customers = await api.get(`customers`);
@@ -41,7 +31,7 @@ function Table() {
     loadCustomers();
   }, [loadCustomers]); 
 
-  return (
+  return(
     <Container>
       <table>
         <thead>
@@ -71,5 +61,3 @@ function Table() {
     </Container>
   );
 }
-
-export { Table };

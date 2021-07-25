@@ -52,7 +52,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   async function Login({ email, password }: SignInCredentials) {
-    await new Promise(resolve => setTimeout(resolve, 2000));
     try {
       const response = await api.post("session", {
         email,

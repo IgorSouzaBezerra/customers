@@ -7,7 +7,7 @@ interface IProps {
   returnPageIcon?: boolean;
 }
 
-function Options({ title, returnPageIcon = true }: IProps) {
+export function HeaderPage({ title, returnPageIcon = true }: IProps) {
   const history = useHistory();
   return (
     <Flex
@@ -32,5 +32,3 @@ function Options({ title, returnPageIcon = true }: IProps) {
     </ Flex>
   );
 }
-
-export { Options };

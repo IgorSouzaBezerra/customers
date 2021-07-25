@@ -3,7 +3,7 @@ import { Avatar, Flex, Image, useDisclosure, Fade, Box } from "@chakra-ui/react"
 import logImg from "../../assets/logo.png";
 import { useAuth } from "../../contexts/AuthContext";
 
-function Header() {
+export function Header() {
   const { isOpen, onToggle } = useDisclosure()
   const { user, Logout } = useAuth();
 
@@ -68,5 +68,3 @@ function Header() {
     </div>
   );
 }
-
-export { Header };

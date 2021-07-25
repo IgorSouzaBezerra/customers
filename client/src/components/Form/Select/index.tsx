@@ -1,51 +1,44 @@
-import { useEffect } from "react";
-import { useState, useCallback } from "react";
-import { api } from "../../../services/api";
-import { Label, Select as SelectStyle } from "./styles";
+import { forwardRef, ForwardRefRenderFunction } from "react";
+import { FieldError } from "react-hook-form"
+import { FormControl, FormLabel, Select as ChakraSelect, SelectProps as ChakraSelectProps, FormErrorMessage } from "@chakra-ui/react";
+import { ITypePerson } from "../../../interfaces/customers/ITypePerson";
 
-interface IPropsSelect {
+interface InputProps extends ChakraSelectProps {
+  name: string;
   label?: string;
   placeholder?: string;
-  name?: string;
-  defaultValue?: string;
-  disabled?: boolean;
+  options?: ITypePerson[];
+  error?: FieldError;
 }
 
-interface ITypePersons {
-  id: string;
-  description: string;
-}
-
-function Select({ label, placeholder, name, defaultValue, disabled, ...rest }: IPropsSelect) {
-  const [options, setOptions] = useState<ITypePersons[]>([]);
-
-  const loadOptions = useCallback(async () => {
-    const response = await api.get(`types`);
-    setOptions(response.data)
-  }, []);
-
-  useEffect(() => {
-    loadOptions();
-  }, [loadOptions]);
-
+const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, InputProps> = ({ name, label, placeholder, options, error = null, ...rest }, ref) => {
   return (
-    <>
-      <Label>{label}</Label>
-      <SelectStyle
-        placeholder={placeholder} 
-        name={name} 
-        disabled={disabled} 
-        defaultValue={defaultValue}
-        value={defaultValue}
+    <FormControl isInvalid={!!error}>
+      { !!label && <FormLabel htmlFor={name}>{label}</FormLabel> }
+      <ChakraSelect
+        name={name}
+        id={name}
+        placeholder={placeholder}
+        padding="0 12"
+        borderColor="#D7D7D7"
+        bg="#E7E9EE"
+        color="#000"
+        variant="filled"
         {...rest}
+        ref={ref}
       >
-        <option>Selecione uma opção</option>
-        {options.map(o => (
-          <option value={o.id} key={o.id}>{o.description}</option>
+        {options?.map(option => (
+          <option key={option.id} value={option.id}>{option.description}</option>
         ))}
-      </SelectStyle>
-    </>
+      </ChakraSelect>
+
+      {!!error && (
+        <FormErrorMessage>
+          {error.message}
+        </FormErrorMessage>
+      )}
+    </FormControl>
   );
 }
 
-export { Select };
+export const Select = forwardRef(SelectBase);
