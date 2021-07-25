@@ -16,6 +16,9 @@ class Address {
   zip_code: string;
 
   @Column()
+  district: string;
+
+  @Column()
   street: string;
 
   @Column()
