@@ -11,7 +11,7 @@ export const Container = styled.div`
 
   table {
     width: 100%;
-    border-spacing: 0 8px;
+    border-spacing: 8px;
     
     th {
       padding: 16px 32px;
