@@ -9,9 +9,13 @@ import { FaRegEdit } from "react-icons/fa";
 import { Input } from "./Input";
 import { Select } from "./Select";
 
-import { getCustomer, getTypePerson } from "../../pages/Customers/customer";
+import { getCustomer, getTypePerson, getVehicles } from "../../pages/Customers/customer";
 import { ICustomer } from "../../interfaces/customers/ICustomer";
 import { ITypePerson } from "../../interfaces/customers/ITypePerson";
+import { IVehicles } from "../../interfaces/customers/IVehicles";
+import { api } from "../../services/api";
+import { ICustomerSend } from "../../interfaces/customers/ICustomerSend";
+import { ErrorToast, SucessToast } from "../Toast";
 
 interface IParams {
   id: string;
@@ -24,10 +28,11 @@ interface IPropsForm {
 export function Form({ disabled = false }: IPropsForm) {
   const { id } = useParams<IParams>();
   const history = useHistory();
-  const { register, handleSubmit, formState, setValue } = useForm();
+  const { register, handleSubmit, formState, setValue, getValues } = useForm();
 
   const [customer, setCustomer] = useState<ICustomer>();
   const [typePerson, setTypePerson] = useState<ITypePerson[]>([]);
+  const [vehicles, setVehicles] = useState<IVehicles[]>([]);
 
   const [car, setCar] = useState(false);
   const [truck, setTruck] = useState(false);
@@ -37,6 +42,24 @@ export function Form({ disabled = false }: IPropsForm) {
     const typePerson = await getTypePerson();
     setTypePerson(typePerson);
   }, []);
+
+  const loadVehicles = useCallback(async () => {
+    const vehicles = await getVehicles();
+    setVehicles(vehicles);
+  }, []);
+
+  const handleCep = useCallback(async () => {
+    const cep = getValues("zip_code");
+
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      .then(response => response.json())
+      .then(response => {
+        setValue("district", response.bairro);
+        setValue("street", response.logradouro);
+        setValue("city", response.localidade);
+        setValue("state", response.uf);
+      });
+  }, [getValues, setValue]);
 
   const loadCustomer = useCallback(async () => {
     const customer = await getCustomer(id);
@@ -53,6 +76,7 @@ export function Form({ disabled = false }: IPropsForm) {
     setValue("day_service", customer.day_service);
 
     setValue("zip_code", customer.address.zip_code);
+    setValue("district", customer.address.district);
     setValue("street", customer.address.street);
     setValue("number", customer.address.number);
     setValue("city", customer.address.city);
@@ -75,10 +99,63 @@ export function Form({ disabled = false }: IPropsForm) {
   useEffect(() => {
     loadCustomer();
     loadTypePerson();
-  }, [loadTypePerson, loadCustomer]);
+    loadVehicles();
+  }, [loadTypePerson, loadCustomer, loadVehicles]);
 
-  const submit: SubmitHandler<ICustomer> = async (values) => {    
+  const submit: SubmitHandler<ICustomerSend> = async (values) => {    
     console.log(values)
+
+    let vehiclesArrayString = [];
+
+    if (car) {
+      const carFilter = vehicles.filter(c => c.description === "Carro");
+      vehiclesArrayString.push(carFilter[0].id);
+    }
+    
+    if (truck) {
+      const trukFilter = vehicles.filter(c => c.description === "Caminhão");
+      vehiclesArrayString.push(trukFilter[0].id);
+    }
+    
+    if (motorcycle) {
+      const motorcycleFilter = vehicles.filter(c => c.description === "Moto");
+      vehiclesArrayString.push(motorcycleFilter[0].id);
+    }
+
+
+    const vehiclesObj = vehiclesArrayString.map(vehicle => {
+      const result = vehicles.filter(v => v.id === vehicle);
+      return result[0];
+    });
+
+    try {
+      await api.put("customers", { 
+        id: values.id,
+        name: values.name,
+        surname: values.surname,
+        email: values.email,
+        cpf: values.cpf,
+        phone: values.phone,
+        type: values.type,
+        end_time: values.end_time,
+        day_service: values.day_service,
+        vehicles: vehiclesObj,
+        address: {
+          id: customer?.address.id,
+          zip_code: values.zip_code,
+          district: values.district,
+          street: values.street,
+          number: values.number,
+          city: values.city,
+          state: values.state,
+        },
+      });
+
+      history.push(`/view/${values.id}`);
+      SucessToast("Cliente criado com sucesso!");
+    } catch {
+      ErrorToast("Falha ao criar Cliente :(");
+    }
   }
 
   return (
@@ -185,6 +262,25 @@ export function Form({ disabled = false }: IPropsForm) {
         />
 
         <Box
+          display="flex"
+          flexDir="row"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Input 
+            type="text" 
+            isDisabled={disabled}
+            label="CEP"
+            {...register('zip_code')}
+          />
+          <Button
+            marginTop={8}
+            colorScheme="facebook"
+            onClick={handleCep}
+          >Buscar</Button>
+        </Box>
+
+        <Box
           mt={10}
           mb={10}
           p={7}
@@ -194,20 +290,15 @@ export function Form({ disabled = false }: IPropsForm) {
           <Input 
             type="text" 
             isDisabled={disabled}
-            label="CEP"
-            {...register('zip_code')}
-          />
-          <Input 
-            type="text" 
-            isDisabled={disabled}
             label="Rua"
             {...register('street')}
           />
+        
           <Input 
             type="text" 
             isDisabled={disabled}
-            label="Número"
-            {...register('number')}
+            label="Bairro"
+            {...register('district')}
           />
 
           <Input 
@@ -222,6 +313,13 @@ export function Form({ disabled = false }: IPropsForm) {
             isDisabled={disabled}
             label="Cidade"
             {...register('city')}
+          />
+
+          <Input 
+            type="text" 
+            isDisabled={disabled}
+            label="Número"
+            {...register('number')}
           />
         </Box>
         <Box

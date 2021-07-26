@@ -15,6 +15,11 @@ export async function getTypePerson() {
   return response.data;
 }
 
+export async function getVehicles() {
+  const response = await api.get(`vehicles`);
+  return response.data;
+}
+
 export async function getIBGEState() {
   const response = await api.get<IState[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados`);
 
