@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Box, Button, Flex, Text, Checkbox } from "@chakra-ui/react";
 import { useParams, useHistory } from "react-router-dom";
 import { SubmitHandler, useForm } from 'react-hook-form';
-// import * as yup from "yup"
-// import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup";
 import { FaRegEdit } from "react-icons/fa";
 
 import { Input } from "./Input";
@@ -17,18 +17,38 @@ import { api } from "../../services/api";
 import { ICustomerSend } from "../../interfaces/customers/ICustomerSend";
 import { ErrorToast, SucessToast } from "../Toast";
 
+const customerFormSchema = yup.object().shape({
+  type: yup.string().required("O Tipo do Cliente é obrigatório"),
+  name: yup.string().required("O Nome é obrigatório"),
+  surname: yup.string().required("O Sobrenome é obrigatório"),
+  email: yup.string().required("O E-mail é obrigatório").email("E-mail inválido"),
+  cpf: yup.string().required("O CPF é obrigatório"),
+  phone: yup.string().required("O Telefone é obrigatório"),
+  end_time: yup.string().required("O Horário Final de Atendimento é obrigatório"),
+  day_service: yup.string().required("A Data do Atendimento é obrigatória"),
+  zip_code: yup.string().required("O CEP é obrigatório"),
+  district: yup.string().required("O Bairro é obrigatório"),
+  street: yup.string().required("A Rua é obrigatória"),
+  number: yup.string().required("O Número é obrigatório"),
+  city: yup.string().required("A Cidade é obrigatória"),
+  state: yup.string().required("O Estado é obrigatório")
+});
+
 interface IParams {
   id: string;
 }
 
 interface IPropsForm {
+  type: string;
   disabled?: boolean;
 }
 
-export function Form({ disabled = false }: IPropsForm) {
+export function Form({ type, disabled = false }: IPropsForm) {
   const { id } = useParams<IParams>();
   const history = useHistory();
-  const { register, handleSubmit, formState, setValue, getValues } = useForm();
+  const { register, handleSubmit, formState, setValue, getValues } = useForm({
+    resolver: yupResolver(customerFormSchema),
+  });
 
   const [customer, setCustomer] = useState<ICustomer>();
   const [typePerson, setTypePerson] = useState<ITypePerson[]>([]);
@@ -97,14 +117,14 @@ export function Form({ disabled = false }: IPropsForm) {
   }, [id, setValue]);
 
   useEffect(() => {
-    loadCustomer();
+    if (type === "view" || type === "edit") {
+      loadCustomer();
+    }
     loadTypePerson();
     loadVehicles();
-  }, [loadTypePerson, loadCustomer, loadVehicles]);
+  }, [type, loadTypePerson, loadCustomer, loadVehicles]);
 
   const submit: SubmitHandler<ICustomerSend> = async (values) => {    
-    console.log(values)
-
     let vehiclesArrayString = [];
 
     if (car) {
@@ -129,29 +149,51 @@ export function Form({ disabled = false }: IPropsForm) {
     });
 
     try {
-      await api.put("customers", { 
-        id: values.id,
-        name: values.name,
-        surname: values.surname,
-        email: values.email,
-        cpf: values.cpf,
-        phone: values.phone,
-        type: values.type,
-        end_time: values.end_time,
-        day_service: values.day_service,
-        vehicles: vehiclesObj,
-        address: {
-          id: customer?.address.id,
-          zip_code: values.zip_code,
-          district: values.district,
-          street: values.street,
-          number: values.number,
-          city: values.city,
-          state: values.state,
-        },
-      });
-
-      history.push(`/view/${values.id}`);
+      if (type === "edit") {
+        await api.put("customers", { 
+          id: values.id,
+          name: values.name,
+          surname: values.surname,
+          email: values.email,
+          cpf: values.cpf,
+          phone: values.phone,
+          type: values.type,
+          end_time: values.end_time,
+          day_service: values.day_service,
+          vehicles: vehiclesObj,
+          address: {
+            id: customer?.address.id,
+            zip_code: values.zip_code,
+            district: values.district,
+            street: values.street,
+            number: values.number,
+            city: values.city,
+            state: values.state,
+          },
+        });
+      } else {
+        await api.post("customers", { 
+          name: values.name,
+          surname: values.surname,
+          email: values.email,
+          cpf: values.cpf,
+          phone: values.phone,
+          type: values.type,
+          end_time: values.end_time,
+          day_service: values.day_service,
+          vehicles: vehiclesObj,
+          address: {
+            zip_code: values.zip_code,
+            district: values.district,
+            street: values.street,
+            number: values.number,
+            city: values.city,
+            state: values.state,
+          },
+        });
+      }
+      
+      history.push(`/`);
       SucessToast("Cliente criado com sucesso!");
     } catch {
       ErrorToast("Falha ao criar Cliente :(");
@@ -246,7 +288,7 @@ export function Form({ disabled = false }: IPropsForm) {
         />
 
         <Input 
-          type="text" 
+          type="time" 
           label="Horário Final de Atendimento"
           error={formState.errors.end_time} 
           isDisabled={disabled}
@@ -270,6 +312,7 @@ export function Form({ disabled = false }: IPropsForm) {
           <Input 
             type="text" 
             isDisabled={disabled}
+            error={formState.errors.zip_code} 
             label="CEP"
             {...register('zip_code')}
           />
@@ -290,6 +333,7 @@ export function Form({ disabled = false }: IPropsForm) {
           <Input 
             type="text" 
             isDisabled={disabled}
+            error={formState.errors.street} 
             label="Rua"
             {...register('street')}
           />
@@ -297,6 +341,7 @@ export function Form({ disabled = false }: IPropsForm) {
           <Input 
             type="text" 
             isDisabled={disabled}
+            error={formState.errors.district} 
             label="Bairro"
             {...register('district')}
           />
@@ -305,6 +350,7 @@ export function Form({ disabled = false }: IPropsForm) {
             type="text" 
             isDisabled={disabled}
             label="Estado"
+            error={formState.errors.state} 
             {...register('state')}
           />
 
@@ -312,6 +358,7 @@ export function Form({ disabled = false }: IPropsForm) {
             type="text" 
             isDisabled={disabled}
             label="Cidade"
+            error={formState.errors.city} 
             {...register('city')}
           />
 
@@ -319,6 +366,7 @@ export function Form({ disabled = false }: IPropsForm) {
             type="text" 
             isDisabled={disabled}
             label="Número"
+            error={formState.errors.number} 
             {...register('number')}
           />
         </Box>

@@ -7,7 +7,7 @@ export function ViewCustomer() {
     <>
       <Header />
       <HeaderPage title="Visualização do cliente" />
-      <Form disabled={true} />
+      <Form type="view" disabled={true} />
     </>
   );
 }
