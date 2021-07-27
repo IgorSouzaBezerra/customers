@@ -8,7 +8,8 @@
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/shared/infra/http/server.ts",
-    "prod": "node dist/shared/infra/http/server.js"
+    "prod": "node dist/shared/infra/http/server.js",
+    "test": "jest --setupFiles dotenv/config"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -36,6 +37,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
+    "@types/jest": "^26.0.24",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/swagger-ui-express": "^4.1.3",
     "@types/uuid": "^8.3.1",
@@ -51,7 +53,9 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-import-helpers": "^1.1.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.6",
     "prettier": "^2.3.0",
+    "ts-jest": "^27.0.4",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.3.5"
   }
